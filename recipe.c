@@ -45,9 +45,10 @@ int main(void) {
     */
 
     /* establish connection with API */
-    int connection = open_clientfd(host, port);
+    int clientfd = open_clientfd(host, port);
+    Rio_readinitb(&rio, clientfd);
 
-    if (connection == -1) {
+    if (clientfd == -1) {
       printf("ERROR: connection could not be established.");
     }
 
@@ -71,13 +72,15 @@ int main(void) {
          i.e. --> "GET /api?q=salad HTTP/1.1\r\nHost: www.recipepuppy.com\r\n\r\n"
     */
 
-    /*       */
-    Rio_writen(&rio, connection);
-
-
-
-
-    /* ---------------------------------- adder.c ------------------------------------------- */
+    /*  echoclient.c:
+          after establishing a connection with the server, the client enters a loop
+          that repeatedly
+            1) reads a text line from standard input (stdin),             while (Fgets(buf, MAXLINE, stdin) != NULL) {
+            2) sends the text line to the server,                           Rio_writen(clientfd, buf, strlen(buf));
+            3) reads the echo line from the server,                         Rio_readlineb(&rio, buf, MAXLINE);
+            4) and prints the result to standard output (stdout)            Fputs(buf, stdout);
+                                                                          }
+    */
 
     /* Extract the two arguments */
     if ((buf = getenv("QUERY_STRING")) != NULL) {
@@ -87,6 +90,9 @@ int main(void) {
 	     strcpy(arg2, p+1);
 	     n1 = atoi(arg1);
 	     n2 = atoi(arg2);
+
+       /* make API call */
+
     }
 
     /* Make the response body */
@@ -103,7 +109,7 @@ int main(void) {
     printf("%s", content);
     fflush(stdout);
 
-    Close(connection);
+    Close(clientfd);
     exit(0);
 }
 /* $end adder */
