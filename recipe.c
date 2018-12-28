@@ -23,11 +23,26 @@ receive the response data and deal with it
 
 (requires a host header)
 
+
+  REQUEST TO API:
+
+
+        GET /api?q=arg1... HTTP/1.1
+        Host: www.recipepuppy.com
+        blank line
+
+       i.e. --> "GET /api?q=salad HTTP/1.1\r\nHost: www.recipepuppy.com\r\n\r\n"
+
  */
 
 int main(void) {
     char *buf, *p;
-    char arg1[MAXLINE], arg2[MAXLINE], content[MAXLINE];
+    char arg1[MAXLINE], arg2[MAXLINE], arg3[MAXLINE], content[MAXLINE];
+            // ----- will the args come in as "cookie" or "recipe=cookie"? (html form) -----
+            //  (just parse if necessary)
+
+    char buffer[MAXLINE];
+    char buffer2[MAXLINE];
 
     /* Extract the two arguments */
     if ((buf = getenv("QUERY_STRING")) != NULL) {
@@ -39,52 +54,43 @@ int main(void) {
     	 n2 = atoi(arg2);
        n3 = atoi(arg3);
 
+       // ----- add error handling for if there is only 1 arg -----
+       // (because they just search for a recipe)
     }
-    rio_t rio;
+
     char *host, *port;
-    host = "www.recipepuppy.com"  
+    rio_t rio;
+    host = "www.recipepuppy.com"
     port = "80";
-
-    /*
-    a client establishes a connection with a server by calling open_clientfd
-
-    PARAMETERS: it establishes a connection with a server running on host 'hostname' and
-    listening for connection requesst on port number 'port'
-
-        -int open_clientfd(char *hostname, char *port)
-        -return desriptor if OK and -1 on error
-    */
 
     /* establish connection with API */
     int clientfd = open_clientfd(host, port);
     Rio_readinitb(&rio, clientfd);
 
-    if (clientfd == -1) {
+
+    if (clientfd == -1) {                                                   // if it couldn't establish connect
       printf("ERROR: connection could not be established.");
     }
 
-
-
+    // if they search for a certain recipe
     /*
-    REQUEST TO TINY:
-        GET /cgi-bin/recipe?salad&... HTTP/1.1
-        Host: www.recipepuppy.com                --> does tiny know to ignore host header?
-        blank line
-
-        OR
-
-        GET /cgi-bin/recipe?salad&... HTTP/1.0
-        blank line
-
-    REQUEST TO API:
-
-
-          GET /api?q=arg1... HTTP/1.1
-          Host: www.recipepuppy.com
-          blank line
-
-         i.e. --> "GET /api?q=salad HTTP/1.1\r\nHost: www.recipepuppy.com\r\n\r\n"
+    char *arg1 = arg1;
+    char *recipe = "recipe";
+    char *arg = strstr(arg1, recipe);
+    if (arg) { ... }
     */
+    sprintf(buffer, "GET http://www.recipepuppy.com/api/?q=%s\n", arg1);       // save to buffer
+
+    // if they search for ingredients
+            // ----- ADD CODE ------
+
+    Rio_writen(clientfd, buffer, MAXLINE);    // send request to server
+    Rio_readlineb(&rio, buffer2, MAXLINE);    // read response
+    Close(clientfd);
+
+
+
+
 
     /*  echoclient.c:
           after establishing a connection with the server, the client enters a loop
