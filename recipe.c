@@ -68,19 +68,19 @@ int main(void) {
     Rio_readinitb(&rio, clientfd);
 
 
-    if (clientfd == -1) {                                                   // if it couldn't establish connect
+    if (clientfd == -1) {                                                   // if it couldn't establish connection
       printf("ERROR: connection could not be established.");
     }
 
     // if they search for a certain recipe
-    /*
-    char *arg1 = arg1;
-    char *recipe = "recipe";
-    char *arg = strstr(arg1, recipe);
-    if (arg) { ... }
-    */
-    sprintf(buffer, "GET http://www.recipepuppy.com/api/?q=%s\n", arg1);       // save to buffer
 
+    char *arg1 = arg1;
+    char *recipe = "q";
+    char *arg = strstr(arg1, recipe);
+    if (arg) {
+      sprintf(buffer, "GET http://www.recipepuppy.com/api/?%s\n", arg1);   // save to buffer
+                                        // ------ does request need to say "?q=%s" or just "?%s" ? ------
+    }
     // if they search for ingredients
             // ----- ADD CODE ------
 
