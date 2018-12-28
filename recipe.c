@@ -22,11 +22,12 @@ int main(void) {
 
        // ----- add error handling for if there is only 1 arg -----
        // (because they just search for a recipe)
+
     }
 
-    char *host, *port;
     rio_t rio;
-    host = "www.recipepuppy.com"
+    char *host, *port;
+    host = "www.recipepuppy.com";
     port = "80";
 
     /* establish connection with API */
@@ -66,10 +67,9 @@ int main(void) {
     */
 
     /* Make the response body */
-    sprintf(content, "Welcome to add.com: ");
-    sprintf(content, "%sTHE Internet addition portal.\r\n<p>", content);
-    sprintf(content, "%sThe answer is: %d + %d = %d\r\n<p>",
-	    content, n1, n2, n1 + n2);
+    sprintf(content, "Search Results: ");   // should say "search results for ____"
+    sprintf(content, "%s\r\n<p>", content);
+    sprintf(content, "%s\r\n<p>", content);
     sprintf(content, "%sThanks for visiting!\r\n", content);
 
     /* Generate the HTTP response */
