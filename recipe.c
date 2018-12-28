@@ -1,39 +1,5 @@
 #include "csapp.h"
-/*
-http://www.recipepuppy.com/about/api/
-
-> telnet www.recipepuppy.com 80
-> GET /api?q=salad HTTP/1.1
-  Host: www.recipepuppy.com
-  -- blank line --
-
-- The Tiny web server is going to run our “website.” Tiny can receive HTTP requests and handle them.
-
-- We can send a GET request to Tiny that tells it to open recipe.c, like we told it to run adder.c
-by doing GET /cgi-bin/adder?1500&1400 HTTP/1.0. Instead of 1500 and 1400, it would contain the
-parameters for the recipe search (like q=salad).
-
-- recipe.c would then be run and it would connect to the recipepuppy API, send the request, and
-receive the response data and deal with it
-- then Tiny displays everything on browser
-
-**recipepuppy.com (and most APIs) uses HTTP 1.1, NOT HTTP 1.0. So the request looks like this:
-	GET /api HTTP/1.1
-	Host: www.recipepuppy.com
-
-(requires a host header)
-
-
-  REQUEST TO API:
-
-
-        GET /api?q=arg1... HTTP/1.1
-        Host: www.recipepuppy.com
-        blank line
-
-       i.e. --> "GET /api?q=salad HTTP/1.1\r\nHost: www.recipepuppy.com\r\n\r\n"
-
- */
+// http://www.recipepuppy.com/about/api/
 
 int main(void) {
     char *buf, *p;
@@ -68,12 +34,11 @@ int main(void) {
     Rio_readinitb(&rio, clientfd);
 
 
-    if (clientfd == -1) {                                                   // if it couldn't establish connection
+    if (clientfd == -1) {             // if it couldn't establish connection
       printf("ERROR: connection could not be established.");
     }
 
     // if they search for a certain recipe
-
     char *arg1 = arg1;
     char *recipe = "q";
     char *arg = strstr(arg1, recipe);
@@ -84,12 +49,10 @@ int main(void) {
     // if they search for ingredients
             // ----- ADD CODE ------
 
-    Rio_writen(clientfd, buffer, MAXLINE);    // send request to server
-    Rio_readlineb(&rio, buffer2, MAXLINE);    // read response
+    Rio_writen(clientfd, buffer, MAXLINE);    // send request
+    Rio_readlineb(&rio, buffer2, MAXLINE);    // get response
+    sprintf(content, "%s%s\n", content, buffer2);
     Close(clientfd);
-
-
-
 
 
     /*  echoclient.c:
@@ -101,8 +64,6 @@ int main(void) {
             4) and prints the result to standard output (stdout)            Fputs(buf, stdout);
                                                                           }
     */
-
-
 
     /* Make the response body */
     sprintf(content, "Welcome to add.com: ");
