@@ -1,4 +1,4 @@
-#include "../csapp.h"
+#include "csapp.h"
 /*
 http://www.recipepuppy.com/about/api/
 
@@ -28,10 +28,21 @@ receive the response data and deal with it
 int main(void) {
     char *buf, *p;
     char arg1[MAXLINE], arg2[MAXLINE], content[MAXLINE];
-    int n1=0, n2=0;
+
+    /* Extract the two arguments */
+    if ((buf = getenv("QUERY_STRING")) != NULL) {
+      p = strchr(buf, '&');
+    	*p = '\0';
+    	 strcpy(arg1, buf);
+    	 strcpy(arg2, p+1);
+    	 n1 = atoi(arg1);
+    	 n2 = atoi(arg2);
+       n3 = atoi(arg3);
+
+    }
     rio_t rio;
     char *host, *port;
-    host = "www.recipepuppy.com"  /* just be able to connect to homepage of main website for now */
+    host = "www.recipepuppy.com"  
     port = "80";
 
     /*
@@ -52,6 +63,8 @@ int main(void) {
       printf("ERROR: connection could not be established.");
     }
 
+
+
     /*
     REQUEST TO TINY:
         GET /cgi-bin/recipe?salad&... HTTP/1.1
@@ -64,6 +77,7 @@ int main(void) {
         blank line
 
     REQUEST TO API:
+
 
           GET /api?q=arg1... HTTP/1.1
           Host: www.recipepuppy.com
@@ -82,18 +96,7 @@ int main(void) {
                                                                           }
     */
 
-    /* Extract the two arguments */
-    if ((buf = getenv("QUERY_STRING")) != NULL) {
-	     p = strchr(buf, '&');
-	     *p = '\0';
-	     strcpy(arg1, buf);
-	     strcpy(arg2, p+1);
-	     n1 = atoi(arg1);
-	     n2 = atoi(arg2);
 
-       /* make API call */
-
-    }
 
     /* Make the response body */
     sprintf(content, "Welcome to add.com: ");
