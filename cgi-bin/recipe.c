@@ -18,7 +18,7 @@ int main(void) {
     	 strcpy(arg2, p+1);
     	 n1 = atoi(arg1);
     	 n2 = atoi(arg2);
-       n3 = atoi(arg3);
+	 n3 = atoi(arg3);
 
        // ----- add error handling for if there is only 1 arg -----
        // (because they just search for a recipe)
@@ -27,6 +27,7 @@ int main(void) {
 
     rio_t rio;
     char *host, *port;
+
     host = "www.recipepuppy.com";
     port = "80";
 
