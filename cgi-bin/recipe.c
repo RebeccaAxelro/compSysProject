@@ -4,44 +4,46 @@
 int main(void) {
     char *buf, *p;
     char arg1[MAXLINE], arg2[MAXLINE], arg3[MAXLINE], content[MAXLINE];
-            // ----- will the args come in as "cookie" or "recipe=cookie"? (html form) -----
-            //  (just parse if necessary)
+            // ----- will the args come in as "cookies" or "q=cookies"?  -----
+            //       (just parse if necessary)
 
     char buffer[MAXLINE];
     char buffer2[MAXLINE];
 
-    /* Extract the two arguments */
+    /* Extract the arguments */
     if ((buf = getenv("QUERY_STRING")) != NULL) {
       p = strchr(buf, '&');
     	*p = '\0';
-    	 strcpy(arg1, buf);
-    	 strcpy(arg2, p+1);
-    	 n1 = atoi(arg1);
-    	 n2 = atoi(arg2);
-	 n3 = atoi(arg3);
-
-       // ----- add error handling for if there is only 1 arg -----
-       // (because they just search for a recipe)
-
+      strcpy(arg1, buf);
+      strcpy(arg2, p+1);
+      strcpy(arg2, p+2);
+      char a1 = atoi(arg1);
+      // ----- add error handling for if there is only 1 arg -----
+      // (i.e. if they just search for a recipe or 1 ingredient)
+      // would they be null if they dont exist??
+      if (arg2 != NULL) {
+        char a2 = atoi(arg2);
+      }
+      if (arg3 != NULL) {
+        char a3 = atoi(arg3);
+      }
     }
 
     rio_t rio;
     char *host, *port;
-
     host = "www.recipepuppy.com";
     port = "80";
 
-    /* establish connection with API */
+    // establish connection with API
     int clientfd = open_clientfd(host, port);
     Rio_readinitb(&rio, clientfd);
 
 
-    if (clientfd == -1) {             // if it couldn't establish connection
+    if (clientfd == -1) {   // if it couldn't establish connection
       printf("ERROR: connection could not be established.");
     }
 
     // if they search for a certain recipe
-    char *arg1 = arg1;
     char *recipe = "q";
     char *arg = strstr(arg1, recipe);
     if (arg) {
@@ -68,7 +70,7 @@ int main(void) {
     */
 
     /* Make the response body */
-    sprintf(content, "Search Results: ");   // should say "search results for ____"
+    sprintf(content, "Results for %s: ", arg1);
     sprintf(content, "%s\r\n<p>", content);
     sprintf(content, "%s\r\n<p>", content);
     sprintf(content, "%sThanks for visiting!\r\n", content);
@@ -83,4 +85,3 @@ int main(void) {
     Close(clientfd);
     exit(0);
 }
-/* $end adder */
